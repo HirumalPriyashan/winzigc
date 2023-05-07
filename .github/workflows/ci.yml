@@ -1,0 +1,40 @@
+name: Build project and Test
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main, ci]
+
+jobs:
+  build-gradle-project:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout project sources
+      uses: actions/checkout@v2
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+    - name: Run build with Gradle Wrapper
+      run: ./gradlew build
+  run-test-using-make:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Checkout project sources
+      uses: actions/checkout@v2
+    - name: Run tests
+      run: ./.github/workflows/scripts/tests.sh
+  run-submission-test:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Checkout project sources
+      uses: actions/checkout@v2
+    - name: Prepare
+      run: |
+        cd src/main/java
+        tar -cvf 180463U.tar .
+        mv 180463U.tar ../../../
+    - name: Untar
+      run: |
+        tar -xvf 180463U.tar
+    - name: Run tests
+      run: ./.github/workflows/scripts/submission.sh

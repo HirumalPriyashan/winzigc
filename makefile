@@ -13,5 +13,3 @@ default: compile
 compile:
 	$(JC) $(JCFLAGS) $(SRCS)
 
-clean:
-	rm $(OUT_DIR)/*.class
