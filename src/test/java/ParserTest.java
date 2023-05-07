@@ -19,10 +19,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("Checks for Top Down Parser")
+@DisplayName("Checks for Parser")
 public class ParserTest {
     @Test
-    @DisplayName("Test for parser")
+    @DisplayName("Test for Top Down Parser")
     void test() throws InvalidTokenException, ParsingException {
         for(int i = 1; i <= 15; i++){
             RunTest(String.format("winzig_test_programs/winzig_%02d" , i));
@@ -30,7 +30,6 @@ public class ParserTest {
     }
     private void RunTest(String filename) throws InvalidTokenException, ParsingException {
         // generate token stream
-        System.out.println(filename);
         FileReader fileReader = new TextFileReader(filename);
         List<String> fileContentList = fileReader.getData();
         String fileContent = String.join("\n", fileContentList);
