@@ -61,7 +61,7 @@ public class PreDefinedToken extends Token {
             case MINUS: return "-";
             case MULT: return "*";
             case DIVIDE: return "/";
-            default: return "";
+            default: return null;
         }
     }
 
@@ -131,7 +131,8 @@ public class PreDefinedToken extends Token {
 
     @Override
     public int getColumnUpdate() {
-        return this.getType() == TokenType.NEW_LINE ? 1 : this.getColumn() + this.getContent().length();
+        return this.getType() == TokenType.NEW_LINE
+            ? 1 : this.getColumn() + this.getContent().length();
     }
 
     @Override

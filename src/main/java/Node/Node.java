@@ -24,11 +24,11 @@ public class Node {
     }
 
     public List<Node> getChildren() {
-        return this.children;
+        return children;
     }
 
     public void addChild(Node child) {
-        this.children.add(0, child);
+        children.add(0, child);
         child.setDepth(this.depth + 1);
         for (Node ch: child.getChildren())
             ch.updateDepth(child);
@@ -41,7 +41,7 @@ public class Node {
     }
 
     public int getDepth() {
-        return this.depth;
+        return depth;
     }
 
     public void setDepth(int depth) {
@@ -50,13 +50,14 @@ public class Node {
 
     public void printNode() {
         Logger.log(this);
-        for (Node node : this.children) {
+        for (Node node : children) {
             node.printNode();
         }
     }
 
     @Override
     public String toString() {
-        return ". ".repeat(this.depth) + this.token + "(" + this.children.size() + ")";
+        return ". ".repeat(depth) + token + "(" +
+            children.size() + ")";
     }
 }

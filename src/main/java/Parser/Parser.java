@@ -7,6 +7,13 @@ import Node.Node;
 import java.util.List;
 import java.util.Stack;
 
+/**
+ * Class representation for parser
+ *
+ * @author Hirumal Priyashan
+ * @version 1.0
+ * @since 1.0
+ */
 public class Parser {
     private final List<Token> tokens;
     private int nextTokenId;
@@ -31,7 +38,8 @@ public class Parser {
     private Token peekNextToken() throws ParsingException {
         if (hasNext())
             return tokens.get(nextTokenId);
-        throw new ParsingException("Token list is over, without completing the parsing");
+        throw new ParsingException(
+            "Token list is over, without completing the parsing");
     }
 
     private boolean matchWithNextToken(TokenType type) throws ParsingException {
@@ -41,7 +49,8 @@ public class Parser {
     private void consume(TokenType type) throws ParsingException {
         Token nextToken = getNextToken();
         if (nextToken == null)
-            throw new ParsingException("\nToken list is over, \n\texpected: \"" + type.name() + "\"");
+            throw new ParsingException(
+                "\nToken list is over, \n\texpected: \"" + type.name() + "\"");
         if (nextToken.getType() != type)
             throw new ParsingException(
                 "\nInvalid token on \n\tline: " + nextToken.getLine() +
@@ -63,9 +72,9 @@ public class Parser {
         if (stack.size() < number_of_children) {
             for (Node node : stack)
                 node.printNode();
-            throw new ParsingException("Stack does not contain enough elements"
-                + "expected: " + number_of_children +
-                "got: " + stack.size());
+            throw new ParsingException("Stack does not contain enough elements,"
+                + "\n\texpected: " + number_of_children +
+                "\n\tgot: " + stack.size());
         }
         Node parent = new Node(name);
         for (int i = 0; i < number_of_children; i++)
@@ -88,19 +97,19 @@ public class Parser {
     }
 
     private void Consts() throws ParsingException {
-        int count = 0;
+        int number_of_children = 0;
         if (matchWithNextToken(TokenType.CONST)) {
             consume(TokenType.CONST);
             Const();
-            count += 1;
+            number_of_children += 1;
             while (matchWithNextToken(TokenType.COMMA)) {
                 consume(TokenType.COMMA);
                 Const();
-                count += 1;
+                number_of_children += 1;
             }
             consume(TokenType.SEMI_COLON);
         }
-        build_tree("consts", count);
+        build_tree("consts", number_of_children);
     }
 
     private void Const() throws ParsingException {
@@ -131,16 +140,16 @@ public class Parser {
     }
 
     private void Types() throws ParsingException {
-        int count = 0;
+        int number_of_children = 0;
         if (matchWithNextToken(TokenType.TYPE)) {
             consume(TokenType.TYPE);
             do {
                 Type();
-                count += 1;
+                number_of_children += 1;
                 consume(TokenType.SEMI_COLON);
             } while (matchWithNextToken(TokenType.IDENTIFIER));
         }
-        build_tree("types", count);
+        build_tree("types", number_of_children);
     }
 
     private void Type() throws ParsingException {
@@ -153,23 +162,23 @@ public class Parser {
     private void LitList() throws ParsingException {
         consume(TokenType.OP_BRCKT);
         Name();
-        int count = 1;
+        int number_of_children = 1;
         while (matchWithNextToken(TokenType.COMMA)) {
             consume(TokenType.COMMA);
             Name();
-            count += 1;
+            number_of_children += 1;
         }
         consume(TokenType.CL_BRCKT);
-        build_tree("lit", count);
+        build_tree("lit", number_of_children);
     }
 
     private void SubProgs() throws ParsingException {
-        int count = 0;
-        while (matchWithNextToken(TokenType.FUNCTION)){
+        int number_of_children = 0;
+        while (matchWithNextToken(TokenType.FUNCTION)) {
             Fcn();
-            count += 1;
+            number_of_children += 1;
         }
-        build_tree("subprogs", count);
+        build_tree("subprogs", number_of_children);
     }
 
     private void Fcn() throws ParsingException {
@@ -192,56 +201,57 @@ public class Parser {
 
     private void Params() throws ParsingException {
         Dcln();
-        int count = 1;
+        int number_of_children = 1;
         while (matchWithNextToken(TokenType.SEMI_COLON)) {
             consume(TokenType.SEMI_COLON);
             Dcln();
-            count += 1;
+            number_of_children += 1;
         }
-        build_tree("params", count);
+        build_tree("params", number_of_children);
     }
 
     private void Dclns() throws ParsingException {
-        int count = 0;
+        int number_of_children = 0;
         if (matchWithNextToken(TokenType.VAR)) {
             consume(TokenType.VAR);
             do {
                 Dcln();
-                count += 1;
+                number_of_children += 1;
                 consume(TokenType.SEMI_COLON);
             } while (matchWithNextToken(TokenType.IDENTIFIER));
         }
-        build_tree("dclns", count);
+        build_tree("dclns", number_of_children);
     }
 
     private void Dcln() throws ParsingException {
         Name();
-        int count = 2;
+        int number_of_children = 1;
         while (!matchWithNextToken(TokenType.COLON)) {
             consume(TokenType.COMMA);
             Name();
-            count += 1;
+            number_of_children += 1;
         }
         consume(TokenType.COLON);
         Name();
-        build_tree("var", count);
+        number_of_children += 1;
+        build_tree("var", number_of_children);
     }
 
     private void Body() throws ParsingException {
         consume(TokenType.BEGIN);
         Statement();
-        int count = 1;
+        int number_of_children = 1;
         while (matchWithNextToken(TokenType.SEMI_COLON)) {
             consume(TokenType.SEMI_COLON);
             Statement();
-            count += 1;
+            number_of_children += 1;
         }
         consume(TokenType.END);
-        build_tree("block", count);
+        build_tree("block", number_of_children);
     }
 
     private void Statement() throws ParsingException {
-        int count = 0;
+        int number_of_children = 0;
         Token nextToken = peekNextToken();
         switch (nextToken.getType()) {
             case IDENTIFIER:
@@ -251,27 +261,27 @@ public class Parser {
                 consume(TokenType.OUTPUT_);
                 consume(TokenType.OP_BRCKT);
                 OutExp();
-                count = 1;
+                number_of_children = 1;
                 while (matchWithNextToken(TokenType.COMMA)) {
                     consume(TokenType.COMMA);
                     OutExp();
-                    count += 1;
+                    number_of_children += 1;
                 }
                 consume(TokenType.CL_BRCKT);
-                build_tree("output", count);
+                build_tree("output", number_of_children);
                 break;
             case IF:
                 consume(TokenType.IF);
                 Expression();
                 consume(TokenType.THEN);
                 Statement();
-                count = 2;
+                number_of_children = 2;
                 if (matchWithNextToken(TokenType.ELSE)) {
                     consume(TokenType.ELSE);
                     Statement();
-                    count += 1;
+                    number_of_children += 1;
                 }
-                build_tree("if", count);
+                build_tree("if", number_of_children);
                 break;
             case WHILE:
                 consume(TokenType.WHILE);
@@ -283,16 +293,16 @@ public class Parser {
             case REPEAT:
                 consume(TokenType.REPEAT);
                 Statement();
-                count = 1;
+                number_of_children = 1;
                 while (matchWithNextToken(TokenType.SEMI_COLON)) {
                     consume(TokenType.SEMI_COLON);
                     Statement();
-                    count += 1;
+                    number_of_children += 1;
                 }
                 consume(TokenType.UNTIL);
                 Expression();
-                count += 1;
-                build_tree("repeat", count);
+                number_of_children += 1;
+                build_tree("repeat", number_of_children);
                 break;
             case FOR:
                 consume(TokenType.FOR);
@@ -309,37 +319,37 @@ public class Parser {
             case LOOP:
                 consume(TokenType.LOOP);
                 Statement();
-                count = 1;
+                number_of_children = 1;
                 while (matchWithNextToken(TokenType.SEMI_COLON)) {
                     consume(TokenType.SEMI_COLON);
                     Statement();
-                    count += 1;
+                    number_of_children += 1;
                 }
                 consume(TokenType.POOL);
-                build_tree("loop", count);
+                build_tree("loop", number_of_children);
                 break;
             case CASE:
                 consume(TokenType.CASE);
                 Expression();
-                count = 1;
+                number_of_children = 1;
                 consume(TokenType.OF);
-                count += CaseClauses();
-                count += OtherwiseClause();
+                number_of_children += CaseClauses();
+                number_of_children += OtherwiseClause();
                 consume(TokenType.END);
-                build_tree("case", count);
+                build_tree("case", number_of_children);
                 break;
             case READ:
                 consume(TokenType.READ);
                 consume(TokenType.OP_BRCKT);
                 Name();
-                count = 1;
+                number_of_children = 1;
                 while (matchWithNextToken(TokenType.COMMA)) {
                     consume(TokenType.COMMA);
                     Name();
-                    count += 1;
+                    number_of_children += 1;
                 }
                 consume(TokenType.CL_BRCKT);
-                build_tree("read", count);
+                build_tree("read", number_of_children);
                 break;
             case EXIT:
                 consume(TokenType.EXIT);
@@ -378,34 +388,35 @@ public class Parser {
     }
 
     private int CaseClauses() throws ParsingException {
-        int count = 0;
+        int number_of_cases = 0;
         do {
             CaseClause();
-            count += 1;
+            number_of_cases += 1;
             consume(TokenType.SEMI_COLON);
         } while (matchWithNextToken(TokenType.INTEGER)
                 || matchWithNextToken(TokenType.CHAR)
                 || matchWithNextToken(TokenType.IDENTIFIER)
         );
-        return count;
+        return number_of_cases;
     }
 
     private void CaseClause() throws ParsingException {
         CaseExpression();
-        int count = 2;
+        int number_of_children = 1;
         while (matchWithNextToken(TokenType.COMMA)) {
             consume(TokenType.COMMA);
             CaseExpression();
-            count += 1;
+            number_of_children += 1;
         }
         consume(TokenType.COLON);
         Statement();
-        build_tree("case_clause", count);
+        number_of_children += 1;
+        build_tree("case_clause", number_of_children);
     }
 
     private void CaseExpression() throws ParsingException {
         ConstValue();
-        if (matchWithNextToken(TokenType.DOTS)){
+        if (matchWithNextToken(TokenType.DOTS)) {
             consume(TokenType.DOTS);
             ConstValue();
             build_tree("..", 2);
@@ -491,10 +502,10 @@ public class Parser {
                     break;
                 default:
                     throw new ParsingException(
-                        "\nInvalid token on \n\tline: " + peekNextToken().getLine() +
-                        ", column: " + peekNextToken().getColumn() +
+                        "\nInvalid token on \n\tline: " + token.getLine() +
+                        ", column: " + token.getColumn() +
                         ",\n\texpected: binary operator\n\treceived: \"" +
-                        peekNextToken().getContent() + "\"");
+                        token.getContent() + "\"");
             }
         }
     }
@@ -518,10 +529,10 @@ public class Parser {
                     break;
                 default:
                     throw new ParsingException(
-                        "\nInvalid token on \n\tline: " + peekNextToken().getLine() +
-                        ", column: " + peekNextToken().getColumn() +
+                        "\nInvalid token on \n\tline: " + token.getLine() +
+                        ", column: " + token.getColumn() +
                         ",\n\texpected: binary operator\n\treceived: \"" +
-                        peekNextToken().getContent() + "\"");
+                        token.getContent() + "\"");
             }
         }
     }
@@ -534,14 +545,14 @@ public class Parser {
                 if (matchWithNextToken(TokenType.OP_BRCKT)) {
                     consume(TokenType.OP_BRCKT);
                     Expression();
-                    int count = 2;
+                    int number_of_children = 2;
                     while (matchWithNextToken(TokenType.COMMA)) {
                         consume(TokenType.COMMA);
                         Expression();
-                        count += 1;
+                        number_of_children += 1;
                     }
                     consume(TokenType.CL_BRCKT);
-                    build_tree("call", count);
+                    build_tree("call", number_of_children);
                 }
                 break;
             case MINUS:
@@ -593,6 +604,9 @@ public class Parser {
     public Node getParsedTree() throws ParsingException {
         if (stack.empty())
             parse();
+        if (stack.size() > 1) {
+            throw new ParsingException("Stack has more than one root.");
+        }
         return stack.pop();
     }
 }

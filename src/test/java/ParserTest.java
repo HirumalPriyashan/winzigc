@@ -22,12 +22,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Checks for Parser")
 public class ParserTest {
     @Test
-    @DisplayName("Test for Top Down Parser")
+    @DisplayName("Test for Parser")
     void test() throws InvalidTokenException, ParsingException {
-        for(int i = 1; i <= 15; i++){
+        for(int i = 1; i <= 15; i++)
             RunTest(String.format("winzig_test_programs/winzig_%02d" , i));
-        }
     }
+
     private void RunTest(String filename) throws InvalidTokenException, ParsingException {
         // generate token stream
         FileReader fileReader = new TextFileReader(filename);

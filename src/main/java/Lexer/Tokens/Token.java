@@ -43,8 +43,7 @@ public abstract class Token {
 
     @Override
     public String toString() {
-        return "Token{" +
-                "content='" + content + '\'' +
+        return  content +"{" +
                 ", line=" + line +
                 ", column=" + column +
                 '}';

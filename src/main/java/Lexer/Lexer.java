@@ -24,12 +24,22 @@ public class Lexer {
     private List<Token> tokens;
     private int position;
 
+    /**
+     * Class constructor.
+     *
+     * @param source Source string
+     */
     public Lexer(String source) {
         this.source = source;
         this.lexerRules = getLexerRules();
         this.tokens = null;
     }
 
+    /**
+     * Prepare and return lexical rule set.
+     *
+     * @return The set of lexical rules
+     */
     private AbstractRule getLexerRules() {
         AbstractRule rules = new Comments();
         rules.setSuccessor(new IdentifierAndSyntax())
@@ -42,6 +52,13 @@ public class Lexer {
         return rules;
     }
 
+    /**
+     * Consume given token from current source
+     *
+     * @param token Token to consume
+     * @param currentSource Source to be consumed
+     * @return Source after consuming token
+     */
     private String consumeToken(Token token, String currentSource) {
         String content = token.getContent();
         position += content.length();
@@ -50,6 +67,11 @@ public class Lexer {
         return currentSource.replaceFirst(Pattern.quote(content), "");
     }
 
+    /**
+     * Generate tokens from the source
+     *
+     * @throws InvalidTokenException
+     */
     private void generateTokens() throws InvalidTokenException {
         tokens = new ArrayList<>();
         Token token;
@@ -57,13 +79,21 @@ public class Lexer {
         while (position < source.length()) {
             token = lexerRules.applyRule(currentSource, line, column);
             if (token instanceof InvalidToken)
-                throw new InvalidTokenException("current source: \n" + currentSource);
+                throw new InvalidTokenException("current source: \n" +
+                    currentSource);
             currentSource = consumeToken(token, currentSource);
             tokens.add(token);
         }
-        tokens.add(new PreDefinedToken("eof", TokenType.END_OF_FILE, line, column));
+        tokens.add(new PreDefinedToken("eof", TokenType.END_OF_FILE,
+            line, column));
     }
 
+    /**
+     * Returns token for the source
+     *
+     * @return Tokens for the source
+     * @throws InvalidTokenException
+     */
     public List<Token> getTokens() throws InvalidTokenException {
         if (tokens == null) {
             generateTokens();
@@ -71,6 +101,12 @@ public class Lexer {
         return tokens;
     }
 
+    /**
+     * Returns screened tokens
+     *
+     * @return Screened tokens for the source
+     * @throws InvalidTokenException
+     */
     public List<Token> getScreenedTokens() throws InvalidTokenException {
         List<Token> screened = new ArrayList<>();
         for (Token token : getTokens())

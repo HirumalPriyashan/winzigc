@@ -3,7 +3,9 @@ package Lexer.Tokens;
 public class CommentToken extends Token {
     private final CommentType commentType;
 
-    public CommentToken(String content, int line, int column, CommentType commentType) {
+    public CommentToken(
+        String content, int line, int column, CommentType commentType
+    ) {
         super(content, TokenType.COMMENT, line, column);
         this.commentType = commentType;
     }
@@ -28,6 +30,8 @@ public class CommentToken extends Token {
 
     @Override
     public String toString() {
-        return commentType == CommentType.TYPE_ONE ? "<CommentTypeOne>" : "<CommentTypeTwo>";
+        return commentType == CommentType.TYPE_ONE
+            ? "<CommentTypeOne>"
+            : "<CommentTypeTwo>";
     }
 }

@@ -23,15 +23,18 @@ class LexerTest {
             throw new RuntimeException(e);
         }
     }
+
     void testSingleToken(String source, String expected) {
         testTokens(source, Collections.singletonList(expected));
     }
+
     @Test
     @DisplayName("Test Comment Type One")
     void testCommentTypeOne() {
         String source = "# Enter numbers from 1 to 3";
         testSingleToken(source, "<CommentTypeOne>");
     }
+
     @Test
     @DisplayName("Test Comment Type Two")
     void testCommentTypeTwo() {
@@ -79,5 +82,12 @@ class LexerTest {
     void testString() {
         String source = "\"hello\"";
         testSingleToken(source, "<string: " + source + ">");
+    }
+
+    @Test
+    @DisplayName("Test Invalid String")
+    void testStringInvalid() {
+        String source = "\"hello\"how";
+        testSingleToken(source, "<string: " + "\"hello\"" + ">");
     }
 }
