@@ -19,14 +19,14 @@ import java.util.regex.Pattern;
 public class Lexer {
     private final AbstractRule lexerRules;
     private final String source;
-    private final int line = 1;
-    private final int column = 0;
+    private int line = 1;
+    private int column = 1;
     private List<Token> tokens;
     private int position;
 
     public Lexer(String source) {
         this.source = source;
-        this.lexerRules = this.getLexerRules();
+        this.lexerRules = getLexerRules();
         this.tokens = null;
     }
 
@@ -45,40 +45,38 @@ public class Lexer {
     private String consumeToken(Token token, String currentSource) {
         String content = token.getContent();
         position += content.length();
+        line += token.getNumberOfLines();
+        column = token.getColumnUpdate();
         return currentSource.replaceFirst(Pattern.quote(content), "");
     }
 
     private void generateTokens() throws InvalidTokenException {
-        this.tokens = new ArrayList<>();
+        tokens = new ArrayList<>();
         Token token;
-        String currentSource = this.source;
-        while (position < this.source.length()) {
-            token = this.lexerRules.applyRule(currentSource, line, column);
+        String currentSource = source;
+        while (position < source.length()) {
+            token = lexerRules.applyRule(currentSource, line, column);
             if (token instanceof InvalidToken)
                 throw new InvalidTokenException("current source: \n" + currentSource);
-            currentSource = this.consumeToken(token, currentSource);
-            this.tokens.add(token);
+            currentSource = consumeToken(token, currentSource);
+            tokens.add(token);
         }
-        this.tokens.add(new PreDefinedToken("eof", line, column, PreDefinedTokenType.END_OF_FILE));
+        tokens.add(new PreDefinedToken("eof", TokenType.END_OF_FILE, line, column));
     }
 
     public List<Token> getTokens() throws InvalidTokenException {
-        if (this.tokens == null) {
-            this.generateTokens();
+        if (tokens == null) {
+            generateTokens();
         }
-        return this.tokens;
+        return tokens;
     }
 
     public List<Token> getScreenedTokens() throws InvalidTokenException {
         List<Token> screened = new ArrayList<>();
-        for (Token token : this.getTokens())
-            if (!(token instanceof WhiteSpaceToken)
-                && !(token instanceof CommentToken)
-                && !(
-                    (token instanceof PreDefinedToken)
-                    && (((PreDefinedToken) token).getType() == PreDefinedTokenType.NEW_LINE)
-                )
-            )
+        for (Token token : getTokens())
+            if (!(token.getType() == TokenType.WHITE_SPACE ||
+                    token.getType() == TokenType.COMMENT ||
+                    token.getType() == TokenType.NEW_LINE))
                 screened.add(token);
         return screened;
     }

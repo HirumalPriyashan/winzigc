@@ -1,17 +1,11 @@
 package Lexer.Tokens;
 
 public class PreDefinedToken extends Token {
-    private final PreDefinedTokenType type;
-    public PreDefinedToken(String content, int line, int column, PreDefinedTokenType type) {
-        super(content, line, column);
-        this.type = type;
+    public PreDefinedToken(String content, TokenType type, int line, int column) {
+        super(content, type, line, column);
     }
 
-    public PreDefinedTokenType getType() {
-        return type;
-    }
-
-    private String tokenTypeToString(PreDefinedTokenType type) {
+    private String tokenTypeToString(TokenType type) {
         switch (type) {
             case NEW_LINE: return "new-line";
             case PROGRAM: return "program";
@@ -51,7 +45,7 @@ public class PreDefinedToken extends Token {
             case ASSIGNMENT: return ":=";
             case DOTS: return "..";
             case LT_EQ_OP: return "<=";
-            case NT_OP: return "<>";
+            case NT_EQ_OP: return "<>";
             case LT_OP: return "<";
             case GT_EQ_OP: return ">=";
             case GT_OP: return ">";
@@ -71,67 +65,77 @@ public class PreDefinedToken extends Token {
         }
     }
 
-    public static PreDefinedTokenType stringToType(String type) {
+    public static TokenType stringToType(String type) {
         switch(type) {
-            case "program": return PreDefinedTokenType.PROGRAM;
-            case "var": return PreDefinedTokenType.VAR;
-            case "const": return PreDefinedTokenType.CONST;
-            case "type": return PreDefinedTokenType.TYPE;
-            case "function": return PreDefinedTokenType.FUNCTION;
-            case "return": return PreDefinedTokenType.RETURN;
-            case "begin": return PreDefinedTokenType.BEGIN;
-            case "end": return PreDefinedTokenType.END;
-            case "output": return PreDefinedTokenType.OUTPUT_;
-            case "if": return PreDefinedTokenType.IF;
-            case "then": return PreDefinedTokenType.THEN;
-            case "else": return PreDefinedTokenType.ELSE;
-            case "while": return PreDefinedTokenType.WHILE;
-            case "do": return PreDefinedTokenType.DO;
-            case "case": return PreDefinedTokenType.CASE;
-            case "of": return PreDefinedTokenType.OF;
-            case "otherwise": return PreDefinedTokenType.OTHERWISE;
-            case "repeat": return PreDefinedTokenType.REPEAT;
-            case "for": return PreDefinedTokenType.FOR;
-            case "until": return PreDefinedTokenType.UNTIL;
-            case "loop": return PreDefinedTokenType.LOOP;
-            case "pool": return PreDefinedTokenType.POOL;
-            case "exit": return PreDefinedTokenType.EXIT;
-            case "mod": return PreDefinedTokenType.MODULUS_OPR;
-            case "and": return PreDefinedTokenType.AND_OPR;
-            case "or": return PreDefinedTokenType.OR_OPR;
-            case "not": return PreDefinedTokenType.NOT_OPR;
-            case "read": return PreDefinedTokenType.READ;
-            case "succ": return PreDefinedTokenType.SUCCESSOR;
-            case "pred": return PreDefinedTokenType.PREDECESSOR;
-            case "chr": return PreDefinedTokenType.CHAR_FUNC;
-            case "ord": return PreDefinedTokenType.ORDINAL_FUNC;
-            case "eof": return PreDefinedTokenType.END_OF_FILE;
-            case ":=:": return PreDefinedTokenType.SWAP;
-            case ":=": return PreDefinedTokenType.ASSIGNMENT;
-            case "..": return PreDefinedTokenType.DOTS;
-            case "<=": return PreDefinedTokenType.LT_EQ_OP;
-            case "<>": return PreDefinedTokenType.NT_OP;
-            case "<": return PreDefinedTokenType.LT_OP;
-            case ">=": return PreDefinedTokenType.GT_EQ_OP;
-            case ">": return PreDefinedTokenType.GT_OP;
-            case "=": return PreDefinedTokenType.EQ_OP;
-            case "{": return PreDefinedTokenType.BEGIN_BLOCK;
-            case ":": return PreDefinedTokenType.COLON;
-            case ";": return PreDefinedTokenType.SEMI_COLON;
-            case ".": return PreDefinedTokenType.DOT;
-            case ",": return PreDefinedTokenType.COMMA;
-            case "(": return PreDefinedTokenType.OP_BRCKT;
-            case ")": return PreDefinedTokenType.CL_BRCKT;
-            case "+": return PreDefinedTokenType.PLUS;
-            case "-": return PreDefinedTokenType.MINUS;
-            case "*": return PreDefinedTokenType.MULT;
-            case "/": return PreDefinedTokenType.DIVIDE;
+            case "program": return TokenType.PROGRAM;
+            case "var": return TokenType.VAR;
+            case "const": return TokenType.CONST;
+            case "type": return TokenType.TYPE;
+            case "function": return TokenType.FUNCTION;
+            case "return": return TokenType.RETURN;
+            case "begin": return TokenType.BEGIN;
+            case "end": return TokenType.END;
+            case "output": return TokenType.OUTPUT_;
+            case "if": return TokenType.IF;
+            case "then": return TokenType.THEN;
+            case "else": return TokenType.ELSE;
+            case "while": return TokenType.WHILE;
+            case "do": return TokenType.DO;
+            case "case": return TokenType.CASE;
+            case "of": return TokenType.OF;
+            case "otherwise": return TokenType.OTHERWISE;
+            case "repeat": return TokenType.REPEAT;
+            case "for": return TokenType.FOR;
+            case "until": return TokenType.UNTIL;
+            case "loop": return TokenType.LOOP;
+            case "pool": return TokenType.POOL;
+            case "exit": return TokenType.EXIT;
+            case "mod": return TokenType.MODULUS_OPR;
+            case "and": return TokenType.AND_OPR;
+            case "or": return TokenType.OR_OPR;
+            case "not": return TokenType.NOT_OPR;
+            case "read": return TokenType.READ;
+            case "succ": return TokenType.SUCCESSOR;
+            case "pred": return TokenType.PREDECESSOR;
+            case "chr": return TokenType.CHAR_FUNC;
+            case "ord": return TokenType.ORDINAL_FUNC;
+            case "eof": return TokenType.END_OF_FILE;
+            case ":=:": return TokenType.SWAP;
+            case ":=": return TokenType.ASSIGNMENT;
+            case "..": return TokenType.DOTS;
+            case "<=": return TokenType.LT_EQ_OP;
+            case "<>": return TokenType.NT_EQ_OP;
+            case "<": return TokenType.LT_OP;
+            case ">=": return TokenType.GT_EQ_OP;
+            case ">": return TokenType.GT_OP;
+            case "=": return TokenType.EQ_OP;
+            case "{": return TokenType.BEGIN_BLOCK;
+            case ":": return TokenType.COLON;
+            case ";": return TokenType.SEMI_COLON;
+            case ".": return TokenType.DOT;
+            case ",": return TokenType.COMMA;
+            case "(": return TokenType.OP_BRCKT;
+            case ")": return TokenType.CL_BRCKT;
+            case "+": return TokenType.PLUS;
+            case "-": return TokenType.MINUS;
+            case "*": return TokenType.MULT;
+            case "/": return TokenType.DIVIDE;
             default: return null;
         }
     }
 
     @Override
+    public int getNumberOfLines() {
+        return this.getType() == TokenType.NEW_LINE ? 1 : 0;
+    }
+
+    @Override
+    public int getColumnUpdate() {
+        return this.getType() == TokenType.NEW_LINE ? 1 : this.getColumn() + this.getContent().length();
+    }
+
+    @Override
     public String toString() {
-        return "<" + tokenTypeToString(this.type) + ">";
+        return "<" + this.tokenTypeToString(this.getType()) + ">";
     }
 }

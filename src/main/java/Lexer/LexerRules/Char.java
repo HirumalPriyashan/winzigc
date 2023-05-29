@@ -7,9 +7,8 @@ public class Char extends AbstractRule {
     @Override
     protected Token applyRuleImplementation(String currentSource, int line, int column) {
         String match = matchWithRegex(currentSource, "^'[^']{1}'");
-        if (match != null) {
+        if (match != null)
             return new CharToken(match, line, column);
-        }
         return null;
     }
 }

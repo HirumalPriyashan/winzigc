@@ -6,7 +6,7 @@ import MyExeptions.InvalidTokenException;
 
 import MyExeptions.ParsingException;
 import Node.Node;
-import Parser.TopDownParser;
+import Parser.Parser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +36,7 @@ public class ParserTest {
         Lexer lexer = new Lexer(fileContent);
         List<Token> tokens = lexer.getScreenedTokens();
         // parse
-        TopDownParser parser = new TopDownParser(tokens);
+        Parser parser = new Parser(tokens);
         Node ast = parser.getParsedTree();
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));

@@ -51,19 +51,16 @@ public abstract class AbstractRule {
             String currentSource, int line, int column
     ) {
         Token generatedToken = this.applyRuleImplementation(currentSource, line, column);
-        if (successor != null && generatedToken == null) {
+        if (successor != null && generatedToken == null)
             return successor.applyRule(currentSource, line, column);
-        }
         return generatedToken;
     }
 
     protected final String matchWithRegex(String source, String regex) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(source);
-        if (matcher.find()) {
-            // System.out.println("Found match: " + matcher.group());
+        if (matcher.find())
             return matcher.group();
-        }
         return null;
     }
 }

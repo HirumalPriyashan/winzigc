@@ -4,7 +4,7 @@ import Lexer.Lexer;
 import Lexer.Tokens.Token;
 import Logger.Logger;
 import Node.Node;
-import Parser.TopDownParser;
+import Parser.Parser;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class winzigc {
         Lexer lexer = new Lexer(fileContent);
         List<Token> tokens = lexer.getScreenedTokens();
         // parse
-        TopDownParser parser = new TopDownParser(tokens);
+        Parser parser = new Parser(tokens);
         Node ast = parser.getParsedTree();
         ast.printNode();
     }
