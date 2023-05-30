@@ -1,6 +1,7 @@
 package Lexer.Tokens;
 
-public enum PreDefinedTokenType {
+public enum TokenType {
+    // Pre defined tokens
     NEW_LINE,
     PROGRAM,
     VAR,
@@ -39,7 +40,7 @@ public enum PreDefinedTokenType {
     ASSIGNMENT,
     DOTS,
     LT_EQ_OP,
-    NT_OP,
+    NT_EQ_OP,
     LT_OP,
     GT_EQ_OP,
     GT_OP,
@@ -54,5 +55,18 @@ public enum PreDefinedTokenType {
     PLUS,
     MINUS,
     MULT,
-    DIVIDE
+    DIVIDE,
+
+    // Comment Token
+    COMMENT,
+
+    // Types
+    CHAR,
+    INTEGER,
+    STRING,
+    WHITE_SPACE,
+
+    // Other
+    IDENTIFIER,
+    INVALID,
 }

@@ -8,19 +8,19 @@ import java.io.FileNotFoundException;
 
 /**
  * TextFileReader reads from a given file and returns content
- * 
+ *
  * @author Hirumal Priyashan
  * @version 1.0
  * @since 1.0
  */
-public class TextFileReader implements FileReader{
+public class TextFileReader implements FileReader {
     private final String fileName;
     private List<String> data;
 
     /**
     * Class constructor specifying the path to the file
     * to be read.
-    * 
+    *
     * @param fileName relative or absolute path to the file
     */
     public TextFileReader(String fileName) {
@@ -30,18 +30,18 @@ public class TextFileReader implements FileReader{
     @Override
     public List<String> getData() {
         try {
-            File file = new File(this.fileName);
+            File file = new File(fileName);
             Scanner scanner = new Scanner(file);
-            this.data = new ArrayList<>();
+            data = new ArrayList<>();
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                this.data.add(line);
+                data.add(line);
             }
             scanner.close();
         } catch (FileNotFoundException e) {
             System.out.println("There is no file in the specified path");
             System.exit(-1);
         }
-        return this.data;
+        return data;
     }
 }

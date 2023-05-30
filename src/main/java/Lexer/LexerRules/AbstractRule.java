@@ -50,20 +50,25 @@ public abstract class AbstractRule {
     public final Token applyRule(
             String currentSource, int line, int column
     ) {
-        Token generatedToken = this.applyRuleImplementation(currentSource, line, column);
-        if (successor != null && generatedToken == null) {
+        Token generatedToken = applyRuleImplementation(
+                currentSource, line, column);
+        if (successor != null && generatedToken == null)
             return successor.applyRule(currentSource, line, column);
-        }
         return generatedToken;
     }
 
+    /**
+     * Match the source with a given regex
+     *
+     * @param source Source to be matched
+     * @param regex Regex to be matched
+     * @return Match if found otherwise null
+     */
     protected final String matchWithRegex(String source, String regex) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(source);
-        if (matcher.find()) {
-            // System.out.println("Found match: " + matcher.group());
+        if (matcher.find())
             return matcher.group();
-        }
         return null;
     }
 }
